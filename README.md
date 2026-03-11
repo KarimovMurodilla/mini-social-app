@@ -1,4 +1,4 @@
-# FastAPI Template
+# Mini-social-app
 
 ![CI](https://github.com/darkweid/fastapi-template/actions/workflows/ci.yml/badge.svg?branch=main)
 ![Coverage](https://coveralls.io/repos/github/darkweid/fastapi-template/badge.svg?branch=main)
@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/github/license/darkweid/fastapi-template)
 
 
-Production-ready FastAPI template with modular architecture, async stack, Celery, and full Docker setup.
+Mini-social-app with modular architecture, async stack, Celery, and full Docker setup.
 
 ## Key Features
 - Async FastAPI with modular domain structure.
@@ -70,8 +70,3 @@ Production-ready FastAPI template with modular architecture, async stack, Celery
 - Sync environment: `make req-sync-dev` / `make req-sync-prod`
 - When needed, add pins or ranges in `.in` (e.g. `fastapi>=0.110,<1`) and recompile.
 - Compile lockfiles on the same OS and Python version as production to honor environment markers.
-
-## Documentation
-- Architecture & structure: [docs/readme/architecture.md](https://github.com/darkweid/fastapi-template/blob/main/docs/readme/architecture.md)
-- Infrastructure & ops: [docs/readme/infra.md](https://github.com/darkweid/fastapi-template/blob/main/docs/readme/infra.md)
-- Contributing & CI/CD: [docs/readme/contributing.md](https://github.com/darkweid/fastapi-template/blob/main/docs/readme/contributing.md)
