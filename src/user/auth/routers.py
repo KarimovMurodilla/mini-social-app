@@ -10,7 +10,6 @@ from src.user.auth.dependencies import (
     get_user_id_from_token,
 )
 from src.user.auth.jwt_payload_schema import JWTPayload
-from src.user.auth.security import create_verification_token
 from src.user.auth.schemas import (
     CreateUserModel,
     LoginUserModel,
@@ -19,6 +18,7 @@ from src.user.auth.schemas import (
     ResetPasswordModel,
     SendResetPasswordRequestModel,
 )
+from src.user.auth.security import create_verification_token
 from src.user.auth.usecases.get_access_by_refresh import (
     GetTokensByRefreshUserUseCase,
     get_tokens_by_refresh_user_use_case,
@@ -42,9 +42,6 @@ from src.user.auth.usecases.verify_email import (
     get_verify_email_use_case,
 )
 from src.user.models import User
-from src.user.schemas import (
-    UserProfileViewModel,
-)
 
 router = APIRouter()
 

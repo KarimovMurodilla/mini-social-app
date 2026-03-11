@@ -23,13 +23,11 @@ class Post(Base, UUIDIDMixin, TimestampMixin):
     content: Mapped[str] = mapped_column(Text, nullable=False)
 
     # Relationships
-    author: Mapped["User"] = relationship(
-        "User", back_populates="posts", lazy="selectin"
-    )
-    comments: Mapped[list["Comment"]] = relationship(
+    author: Mapped[User] = relationship("User", back_populates="posts", lazy="selectin")
+    comments: Mapped[list[Comment]] = relationship(
         "Comment", back_populates="post", lazy="selectin", cascade="all, delete-orphan"
     )
-    likes: Mapped[list["Like"]] = relationship(
+    likes: Mapped[list[Like]] = relationship(
         "Like", back_populates="post", lazy="selectin", cascade="all, delete-orphan"
     )
 
@@ -46,8 +44,8 @@ class Comment(Base, UUIDIDMixin, TimestampMixin):
     content: Mapped[str] = mapped_column(String(2000), nullable=False)
 
     # Relationships
-    post: Mapped["Post"] = relationship("Post", back_populates="comments")
-    author: Mapped["User"] = relationship("User", lazy="selectin")
+    post: Mapped[Post] = relationship("Post", back_populates="comments")
+    author: Mapped[User] = relationship("User", lazy="selectin")
 
 
 class Like(Base, TimestampMixin):
@@ -63,5 +61,5 @@ class Like(Base, TimestampMixin):
     __table_args__ = (UniqueConstraint("user_id", "post_id", name="uq_user_post_like"),)
 
     # Relationships
-    user: Mapped["User"] = relationship("User", lazy="selectin")
-    post: Mapped["Post"] = relationship("Post", back_populates="likes")
+    user: Mapped[User] = relationship("User", lazy="selectin")
+    post: Mapped[Post] = relationship("Post", back_populates="likes")

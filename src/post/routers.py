@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.database.session import get_session
@@ -9,6 +9,7 @@ from src.core.errors.exceptions import InstanceNotFoundException
 from src.core.pagination.schemas import (
     PaginatedResponse,
     PaginationParams,
+    make_paginated_response,
 )
 from src.core.schemas import SuccessResponse
 from src.post.dependencies import get_comment_service, get_post_service
@@ -57,7 +58,13 @@ async def list_posts(
     session: AsyncSession = Depends(get_session),
 ) -> PaginatedResponse[PostViewModel]:
     """Get a paginated list of all posts."""
-    return await post_service.get_paginated_list(session, pagination=pagination)
+    result = await post_service.get_paginated_list(session, pagination=pagination)
+    if isinstance(result, tuple):
+        items, total = result
+        return make_paginated_response(
+            items=items, total=total, pagination=pagination, schema=PostViewModel
+        )
+    return result
 
 
 @router.post("", response_model=PostViewModel, status_code=201)
@@ -120,9 +127,15 @@ async def list_comments(
     current_user: User | None = Depends(get_optional_current_user),
 ) -> PaginatedResponse[CommentViewModel]:
     """Get comments for a specific post."""
-    return await comment_service.get_paginated_list(
+    result = await comment_service.get_paginated_list(
         session, pagination=pagination, post_id=post_id
     )
+    if isinstance(result, tuple):
+        items, total = result
+        return make_paginated_response(
+            items=items, total=total, pagination=pagination, schema=CommentViewModel
+        )
+    return result
 
 
 @router.post("/{post_id}/comments", response_model=CommentViewModel, status_code=201)

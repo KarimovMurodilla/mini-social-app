@@ -1,16 +1,12 @@
 from datetime import datetime
 
 from fastapi import Depends
-from sqlalchemy import func, select
-from sqlalchemy.orm import selectinload
 
 from src.core.database.session import get_unit_of_work
-from src.core.database.uow.application import ApplicationUnitOfWork
 from src.core.database.uow.abstract import RepositoryProtocol
+from src.core.database.uow.application import ApplicationUnitOfWork
 from src.core.pagination.schemas import PaginationParams
-from src.post.models import Post
 from src.post.schemas import FeedPostViewModel, FeedViewModel
-from src.user.models import User
 
 
 class GetFeedUseCase:
@@ -25,21 +21,9 @@ class GetFeedUseCase:
         date_to: str | None = None,
     ) -> tuple[list[FeedViewModel], int]:
         async with self.uow as uow:
-            # 1. Base Query to select Users
-            stmt = select(User).where(User.is_deleted == False)
-
-            # 2. Count total users matching the criteria
-            count_stmt = select(func.count()).select_from(stmt.subquery())
-            total_count: int = await uow.session.scalar(count_stmt) or 0
-
-            # 3. Apply pagination and relationships mapping
-            stmt = stmt.options(selectinload(User.posts).selectinload(Post.likes))
-            stmt = stmt.offset((pagination.page - 1) * pagination.size).limit(
-                pagination.size
+            users, total_count = await uow.users.get_feed_users_paginated(
+                uow.session, page=pagination.page, size=pagination.size
             )
-
-            result = await uow.session.execute(stmt)
-            users = result.scalars().all()
 
         # 4. Filter posts based on logic in Python memory
         feed_items = []
