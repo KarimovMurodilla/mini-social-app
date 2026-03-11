@@ -23,6 +23,11 @@ class Permission(StrEnum):
     DELETE_CONTENT = "delete_content"
     PUBLISH_CONTENT = "publish_content"
 
+    # Post management permissions
+    CREATE_POSTS = "create_posts"
+    EDIT_POSTS = "edit_posts"
+    DELETE_POSTS = "delete_posts"
+
     # Payment and billing permissions
     VIEW_INVOICES = "view_invoices"
     CREATE_INVOICE = "create_invoice"

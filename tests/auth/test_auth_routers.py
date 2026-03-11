@@ -53,11 +53,9 @@ async def test_register_endpoint(
     response = await async_client.post(
         "/v1/users/auth/register",
         json={
-            "first_name": "John",
-            "last_name": "Doe",
+            "full_name": "John Doe",
             "email": "john@example.com",
             "username": "john_doe",
-            "phone_number": "+1234567890",
             "password": "StrongPass1!",
         },
     )

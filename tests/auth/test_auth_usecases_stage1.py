@@ -53,9 +53,7 @@ class FakeUsersRepository:
         return build_user(
             email=data["email"],
             username=data["username"],
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            phone_number=data["phone_number"],
+            full_name=data["full_name"],
             password=data.get("password", "StrongPass1!"),
         )
 
@@ -157,11 +155,9 @@ async def test_register_usecase_creates_user_and_sends_email(
     notifier = FakeVerificationNotifier()
     use_case = RegisterUseCase(uow=uow, notifier=notifier)
     data = CreateUserModel(
-        first_name="John",
-        last_name="Doe",
+        full_name="John Doe",
         email="john@example.com",
         username="john_doe",
-        phone_number="+1234567890",
         password="StrongPass1!",
     )
     base_url = URL("http://testserver/")

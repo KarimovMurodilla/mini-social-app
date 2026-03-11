@@ -15,6 +15,9 @@ from src.user.auth.token_helpers import invalidate_all_user_sessions
 from src.user.models import User
 from src.user.repositories import UserRepository
 
+access_token_header_optional = APIKeyHeader(
+    name="Authorization", scheme_name="access-token", auto_error=False
+)
 access_token_header = APIKeyHeader(name="Authorization", scheme_name="access-token")
 refresh_token_header = APIKeyHeader(name="Authorization", scheme_name="refresh-token")
 
@@ -59,6 +62,20 @@ async def get_current_user(
         raise credentials_exception
 
     return user
+
+
+async def get_optional_current_user(
+    token: str | None = Security(access_token_header_optional),
+    session: AsyncSession = Depends(get_session),
+    redis_client: Redis = Depends(get_redis_client),
+) -> User | None:
+    if not token:
+        return None
+
+    try:
+        return await get_current_user(token, session, redis_client)
+    except UnauthorizedException:
+        return None
 
 
 async def get_access_by_refresh_token(

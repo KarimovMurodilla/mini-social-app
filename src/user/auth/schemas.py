@@ -6,42 +6,23 @@ from src.core.schemas import (
     StrongPasswordValidationMixin,
 )
 from src.core.validations import (
-    FULL_NAME_PATTERN,
-    PHONE_NUMBER_MIN_LENGTH,
-    PHONE_NUMBER_REGEX,
+    NAME_WITH_SPACES,
     USERNAME_VALIDATOR,
 )
+from src.user.schemas import UserProfileViewModel
 
 
 class CreateUserModel(StrongPasswordValidationMixin, EmailNormalizationMixin, Base):
-    first_name: str
-    last_name: str
+    full_name: str = Field(min_length=2, max_length=100)
     email: EmailStr
     username: str
-    phone_number: str = Field(min_length=PHONE_NUMBER_MIN_LENGTH)
     password: str
 
-    @field_validator("first_name")
+    @field_validator("full_name")
     @classmethod
-    def validate_first_name(cls, value: str) -> str:
-        if not FULL_NAME_PATTERN.match(value):
-            raise ValueError("First name must contain latin letters and spaces only")
-        return value
-
-    @field_validator("last_name")
-    @classmethod
-    def validate_last_name(cls, value: str) -> str:
-        if not FULL_NAME_PATTERN.match(value):
-            raise ValueError("Last name must contain latin letters and spaces only")
-        return value
-
-    @field_validator("phone_number")
-    @classmethod
-    def validate_phone_number(cls, value: str) -> str:
-        if not PHONE_NUMBER_REGEX.match(value):
-            raise ValueError(
-                "Phone number must contain only digits (optionally starting with '+') and be 5–20 characters long."
-            )
+    def validate_full_name(cls, value: str) -> str:
+        if not NAME_WITH_SPACES.match(value):
+            raise ValueError("Full name must contain letters, spaces, and hyphens only")
         return value
 
     @field_validator("username")
@@ -74,3 +55,15 @@ class ResetPasswordModel(StrongPasswordValidationMixin, Base):
 
 class UserNewPassword(StrongPasswordValidationMixin, Base):
     password: str
+
+
+class RegisterResponseModel(UserProfileViewModel):
+    """
+    Registration response.
+
+    In DEBUG/TESTING we expose a mock verification token/link so the client/tests
+    can verify the user without relying on email delivery.
+    """
+
+    verification_token: str | None = None
+    verification_url: str | None = None

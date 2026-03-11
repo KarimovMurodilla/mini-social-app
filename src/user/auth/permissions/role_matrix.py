@@ -21,6 +21,10 @@ ROLE_PERMISSIONS: dict[UserRole, set[Permission]] = {
         Permission.EDIT_CONTENT,
         Permission.DELETE_CONTENT,
         Permission.PUBLISH_CONTENT,
+        # Post management permissions
+        Permission.CREATE_POSTS,
+        Permission.EDIT_POSTS,
+        Permission.DELETE_POSTS,
         # Payment and billing permissions
         Permission.VIEW_INVOICES,
         Permission.CREATE_INVOICE,
@@ -55,6 +59,9 @@ ROLE_PERMISSIONS: dict[UserRole, set[Permission]] = {
         Permission.CREATE_CONTENT,
         Permission.EDIT_CONTENT,
         Permission.PUBLISH_CONTENT,
+        # Post management permissions
+        Permission.CREATE_POSTS,
+        Permission.EDIT_POSTS,
         # Payment and billing permissions - limited
         Permission.VIEW_INVOICES,
         Permission.VIEW_PAYMENT_METHODS,
@@ -71,6 +78,10 @@ ROLE_PERMISSIONS: dict[UserRole, set[Permission]] = {
         Permission.VIEW_PROFILE,
         Permission.VIEW_CONTENT,
         Permission.VIEW_INVOICES,
+        # Post permissions
+        Permission.CREATE_POSTS,
+        Permission.EDIT_POSTS,
+        Permission.DELETE_POSTS,
         Permission.VIEW_PAYMENT_METHODS,
         Permission.VIEW_REPORTS,
     },

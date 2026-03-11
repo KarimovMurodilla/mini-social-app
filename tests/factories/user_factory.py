@@ -12,9 +12,7 @@ def build_user(
     user_id: UUID | None = None,
     email: str = "user@example.com",
     username: str = "user",
-    first_name: str = "Test",
-    last_name: str = "User",
-    phone_number: str = "+10000000000",
+    full_name: str = "Test User",
     password: str = "password",
     role: UserRole = UserRole.VIEWER,
     is_verified: bool = True,
@@ -22,11 +20,9 @@ def build_user(
 ) -> User:
     user = User(
         id=user_id or uuid4(),
-        first_name=first_name,
-        last_name=last_name,
+        full_name=full_name,
         email=email,
         username=username,
-        phone_number=phone_number,
         password_hash=hash_password(password),
         role=role,
         is_verified=is_verified,

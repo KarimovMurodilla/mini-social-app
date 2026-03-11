@@ -8,19 +8,16 @@ from src.user.enums import UserRole
 
 class UserProfileViewModel(Base):
     id: UUID
-    first_name: str
-    last_name: str
+    full_name: str
     username: str
     role: UserRole
     email: EmailStr
-    phone_number: str
     is_verified: bool
 
 
 class UserSummaryViewModel(Base):
     id: UUID
-    first_name: str
-    last_name: str
+    full_name: str
     username: str
 
 
@@ -29,4 +26,3 @@ class UserSummaryWithContactsViewModel(Base):
     full_name: str
     username: str
     email: EmailStr
-    phone_number: str

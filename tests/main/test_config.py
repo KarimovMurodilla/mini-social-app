@@ -19,7 +19,6 @@ def _base_app_config_data() -> dict[str, object]:
         "CORS_ALLOWED_METHODS": "*",
         "CORS_ALLOWED_HEADERS": "*",
         "CORS_EXPOSE_HEADERS": "*",
-        "TRUST_PROXY_HEADERS": "true",
         "PROJECT_NAME": "app",
         "PROJECT_SECRET_KEY": "secret",
         "PING_INTERVAL": 10,

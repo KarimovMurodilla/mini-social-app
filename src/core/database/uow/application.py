@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.database.repositories import BaseRepository
 from src.core.database.uow.abstract import R, RepositoryProtocol
 from src.core.database.uow.sqlalchemy import RepositoryInstance, SQLAlchemyUnitOfWork
+from src.post.repositories import CommentRepository, LikeRepository, PostRepository
 from src.user.repositories import UserRepository
 
 
@@ -56,7 +57,17 @@ class ApplicationUnitOfWork(SQLAlchemyUnitOfWork[R]):
         """
         return self._get_repository(UserRepository)
 
-    # Add more repository properties as needed
+    @property
+    def posts(self) -> PostRepository:
+        return self._get_repository(PostRepository)
+
+    @property
+    def comments(self) -> CommentRepository:
+        return self._get_repository(CommentRepository)
+
+    @property
+    def likes(self) -> LikeRepository:
+        return self._get_repository(LikeRepository)
 
 
 async def get_uow(session: AsyncSession) -> ApplicationUnitOfWork[RepositoryProtocol]:

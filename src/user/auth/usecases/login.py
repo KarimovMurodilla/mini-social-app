@@ -90,13 +90,6 @@ class LoginUserUseCase:
                 )
                 raise InstanceProcessingException(INVALID_CREDENTIALS_MESSAGE)
 
-            if not user.is_verified:
-                logger.debug(
-                    "[LoginUser] User with email '%s' not verified.",
-                    mask_email(data.email),
-                )
-                raise InstanceProcessingException("User is not verified")
-
             if not user.is_active:
                 logger.debug(
                     "[LoginUser] User with email '%s' is blocked.",

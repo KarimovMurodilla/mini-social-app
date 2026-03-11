@@ -40,7 +40,7 @@ run:
 .PHONY: run-dev
 run-dev:
 	$(DOCKER_COMPOSE_DEV) up --build -d
-	docker restart template-nginx
+	docker restart mini-social-nginx
 
 # Stop the Docker containers
 .PHONY: down
@@ -174,7 +174,7 @@ count-code-lines:
 .PHONY: info
 info:
 	@echo "╔══════════════════════════════════════════════════════════╗"
-	@echo "║                  FastAPI Template Info                   ║"
+	@echo "║                  FastAPI mini-social Info                   ║"
 	@echo "╚══════════════════════════════════════════════════════════╝"
 	@echo ""
 	@echo "🐋 Container Status:"
@@ -211,9 +211,9 @@ info:
 	@echo "   • make shell              # Enter bash inside the app container"
 	@echo "   • make logs               # Show all logs"
 	@echo "   • make logs-app           # Show logs from the app container"
-	@echo "   • make logs-celery        # Show logs from the template-celery-worker container"
-	@echo "   • make logs-celery-beat   # Show logs from the template-celery-beat container"
-	@echo "   • make logs-postgres      # Show logs from the template-postgres container"
+	@echo "   • make logs-celery        # Show logs from the mini-social-celery-worker container"
+	@echo "   • make logs-celery-beat   # Show logs from the mini-social-celery-beat container"
+	@echo "   • make logs-postgres      # Show logs from the mini-social-postgres container"
 	@echo ""
 	@echo "⚙️  Task Queue:"
 	@echo "   • make celery-worker      # Start Celery worker"

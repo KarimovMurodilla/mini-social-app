@@ -33,9 +33,10 @@ from src.core.errors.handlers import (
     ValidationErrorExceptionHandler,
     as_exception_handler,
 )
-from src.system import routers as system_routers
 
 # Import routers here
+from src.post import feed_routers, routers as post_routers
+from src.system import routers as system_routers
 from src.user import routers as user_routers
 
 
@@ -52,6 +53,8 @@ def include_routers(app: FastAPI) -> None:
     """
     v1_router = APIRouter()
     v1_router.include_router(user_routers.router, prefix="/users", tags=["Users"])
+    v1_router.include_router(post_routers.router, prefix="/posts", tags=["Posts"])
+    v1_router.include_router(feed_routers.router, prefix="/feed", tags=["Feed"])
 
     app.include_router(v1_router, prefix="/v1")
     app.include_router(system_routers.router, tags=["System"])

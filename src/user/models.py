@@ -1,5 +1,7 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Boolean, Enum as SQLEnum, Index, String, text
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from src.core.database.base import Base
 from src.core.database.mixins import (
@@ -9,6 +11,9 @@ from src.core.database.mixins import (
 )
 from src.core.utils.security import is_password_hash
 from src.user.enums import UserRole
+
+if TYPE_CHECKING:
+    from src.post.models import Post
 
 
 class User(Base, UUIDIDMixin, TimestampMixin, SoftDeleteMixin):
@@ -28,11 +33,9 @@ class User(Base, UUIDIDMixin, TimestampMixin, SoftDeleteMixin):
         ),
     )
 
-    first_name: Mapped[str] = mapped_column(String(50))
-    last_name: Mapped[str] = mapped_column(String(50))
+    full_name: Mapped[str] = mapped_column(String(100))
     email: Mapped[str] = mapped_column(String(255))
     username: Mapped[str] = mapped_column(String(60))
-    phone_number: Mapped[str] = mapped_column(String(20))
     password_hash: Mapped[str] = mapped_column(String(255))
     role: Mapped[UserRole] = mapped_column(
         SQLEnum(UserRole), nullable=False, default=UserRole.VIEWER
@@ -41,7 +44,9 @@ class User(Base, UUIDIDMixin, TimestampMixin, SoftDeleteMixin):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
     """relationships"""
-    # Add relationships here
+    posts: Mapped[list["Post"]] = relationship(
+        "Post", back_populates="author", cascade="all, delete-orphan"
+    )
 
     @validates("password_hash")
     def validate_password_hash(self, _: str, value: str) -> str:
@@ -65,12 +70,7 @@ class User(Base, UUIDIDMixin, TimestampMixin, SoftDeleteMixin):
             raise ValueError("Password hash must be a valid hash.")
         return value
 
-    @property
-    def full_name(self) -> str:
-        return f"{self.first_name} {self.last_name}"
-
     def __repr__(self) -> str:
         return (
-            f"<User(id={self.id}, first_name={self.first_name!r}, "
-            f"email={self.email!r})>"
+            f"<User(id={self.id}, full_name={self.full_name!r}, email={self.email!r})>"
         )

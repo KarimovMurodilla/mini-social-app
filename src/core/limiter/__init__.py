@@ -7,7 +7,6 @@ import redis.asyncio as aredis
 from loggers import get_logger
 from src.core.errors.exceptions import TooManyRequestsException
 from src.core.limiter.script import lua_script
-from src.main.config import config
 
 logger = get_logger(__name__)
 
@@ -16,14 +15,7 @@ async def default_identifier(request: Request) -> str:
     """
     Creates a rate-limiting key based on the IP address and request path.
     """
-    if config.app.TRUST_PROXY_HEADERS:
-        x_forwarded_for = request.headers.get("X-Forwarded-For")
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(",")[0].strip()
-        else:
-            ip = request.client.host if request.client else "unknown"
-    else:
-        ip = request.client.host if request.client else "unknown"
+    ip = request.client.host if request.client else "unknown"
 
     return f"{ip}:{request.scope['path']}"
 

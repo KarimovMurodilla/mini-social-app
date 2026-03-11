@@ -10,9 +10,11 @@ from src.user.auth.dependencies import (
     get_user_id_from_token,
 )
 from src.user.auth.jwt_payload_schema import JWTPayload
+from src.user.auth.security import create_verification_token
 from src.user.auth.schemas import (
     CreateUserModel,
     LoginUserModel,
+    RegisterResponseModel,
     ResendVerificationModel,
     ResetPasswordModel,
     SendResetPasswordRequestModel,
@@ -50,20 +52,31 @@ router = APIRouter()
 @router.post(
     "/register",
     status_code=201,
-    response_model=UserProfileViewModel,
+    response_model=RegisterResponseModel,
     dependencies=[Depends(RateLimiter(times=10, minutes=10))],
 )
 async def signup_user(
     request: Request,
     user_form_data: CreateUserModel,
     use_case: Annotated[RegisterUseCase, Depends(get_register_use_case)],
-) -> UserProfileViewModel:
+) -> RegisterResponseModel:
     """
     Create a new user account.
     """
-    return await use_case.execute(
+    user = await use_case.execute(
         data=user_form_data, request_base_url=request.base_url
     )
+
+    if config.app.DEBUG:
+        token = create_verification_token({"email": str(user.email)})
+        verification_url = f"{request.base_url}v1/users/auth/verify?token={token}"
+        return RegisterResponseModel(
+            **user.model_dump(),
+            verification_token=token,
+            verification_url=verification_url,
+        )
+
+    return RegisterResponseModel(**user.model_dump())
 
 
 @router.post(

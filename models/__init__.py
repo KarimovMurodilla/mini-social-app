@@ -7,4 +7,5 @@ table relationships effectively.
 
 # Import all models here
 
+from src.post.models import Comment as Comment, Like as Like, Post as Post
 from src.user.models import User as User  # Re-export the User model explicitly

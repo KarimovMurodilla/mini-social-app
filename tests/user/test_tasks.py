@@ -50,10 +50,13 @@ async def test_soft_delete_unverified_users_success(
     users_repo = FakeUsersRepository(result=5)
     uow = build_uow(fake_session, users_repo)
 
-    with patch(
-        "src.user.tasks.local_async_session",
-        return_value=SessionContext(fake_session),
-    ), patch("src.user.tasks.ApplicationUnitOfWork", return_value=uow):
+    with (
+        patch(
+            "src.user.tasks.local_async_session",
+            return_value=SessionContext(fake_session),
+        ),
+        patch("src.user.tasks.ApplicationUnitOfWork", return_value=uow),
+    ):
         result = await _soft_delete_unverified_users()
 
     assert result == 5
@@ -69,10 +72,13 @@ async def test_soft_delete_unverified_users_failure(
     users_repo = FakeUsersRepository(error=Exception("DB Error"))
     uow = build_uow(fake_session, users_repo)
 
-    with patch(
-        "src.user.tasks.local_async_session",
-        return_value=SessionContext(fake_session),
-    ), patch("src.user.tasks.ApplicationUnitOfWork", return_value=uow):
+    with (
+        patch(
+            "src.user.tasks.local_async_session",
+            return_value=SessionContext(fake_session),
+        ),
+        patch("src.user.tasks.ApplicationUnitOfWork", return_value=uow),
+    ):
         result = await _soft_delete_unverified_users()
 
     assert result == 0

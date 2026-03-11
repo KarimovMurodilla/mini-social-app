@@ -108,7 +108,7 @@ def sync_mypy_additional_dependencies(
     if missing_in_requirements:
         missing = ", ".join(sorted(set(missing_in_requirements)))
         raise RuntimeError(
-            "dependencies are missing in infra/requirements/dev.txt: " f"{missing}"
+            f"dependencies are missing in infra/requirements/dev.txt: {missing}"
         )
 
     updated_lines = lines[:dep_start] + new_dep_lines + lines[dep_end:]

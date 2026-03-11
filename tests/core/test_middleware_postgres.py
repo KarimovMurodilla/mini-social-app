@@ -89,7 +89,9 @@ async def test_handle_postgresql_error_foreign_key_violation_returns_400() -> No
 @pytest.mark.asyncio
 async def test_handle_postgresql_error_detail_fallback_from_raw_message() -> None:
     err = IntegrityError(
-        "msg", None, DummyForeignKeyViolationNoDetail()  # type: ignore[arg-type]
+        "msg",
+        None,
+        DummyForeignKeyViolationNoDetail(),  # type: ignore[arg-type]
     )
 
     result = handle_postgresql_error(err)
